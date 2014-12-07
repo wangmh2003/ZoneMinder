@@ -12,12 +12,28 @@ function changeScale()
     var newWidth = ( baseWidth * scale ) / SCALE_BASE;
     var newHeight = ( baseHeight * scale ) / SCALE_BASE;
 
-    streamScale( scale );
+	if(streamMode == 'video') {
+		var videoid = document.getElementById('videoobj');
+		
+		videoid.style.width = newWidth + "px";
+		videoid.style.height = newHeight + "px";
+	} else {
+		streamScale( scale );
 
     /*Stream could be an applet so can't use moo tools*/ 
-    var streamImg = document.getElementById('evtStream');
-    streamImg.style.width = newWidth + "px";
-    streamImg.style.height = newHeight + "px";
+    
+    var vid1=$('vid1');
+    if(vid1)
+    {
+        vid1.style.width = newWidth + "px";
+        vid1.style.height = newHeight + "px";
+    }
+    else
+    {
+        var streamImg = document.getElementById('evtStream');
+        streamImg.style.width = newWidth + "px";
+        streamImg.style.height = newHeight + "px";
+    }
 }
 
 function changeReplayMode()
@@ -86,20 +102,30 @@ function streamPause( action )
     setButtonState( $('slowFwdBtn'), 'inactive' );
     setButtonState( $('slowRevBtn'), 'inactive' );
     setButtonState( $('fastRevBtn'), 'unavail' );
-    if ( action )
+    var vid1=$('vid1');
+    if(vid1)
+        vid1.pause();
+    else if ( action )
         streamReq.send( streamParms+"&command="+CMD_PAUSE );
 }
 
 function streamPlay( action )
 {
+    var vid1=$('vid1');
     setButtonState( $('pauseBtn'), 'inactive' );
     if (streamStatus)
         setButtonState( $('playBtn'), streamStatus.rate==1?'active':'inactive' );
     setButtonState( $('fastFwdBtn'), 'inactive' );
-    setButtonState( $('slowFwdBtn'), 'unavail' );
-    setButtonState( $('slowRevBtn'), 'unavail' );
+    setButtonState( $('slowFwdBtn'), vid1?'inactive':'unavail' );
+    setButtonState( $('slowRevBtn'), vid1?'inactive':'unavail' );
     setButtonState( $('fastRevBtn'), 'inactive' );
-    if ( action )
+    if(vid1)
+    {
+        vid1.playbackRate=1.0;
+        vid1.play();
+        setButtonState( $('playBtn'), 'active' );
+    }
+    else if ( action )
     {
         streamReq.send( streamParms+"&command="+CMD_PLAY );
     }
@@ -107,68 +133,125 @@ function streamPlay( action )
 
 function streamFastFwd( action )
 {
+    var vid1=$('vid1');
     setButtonState( $('pauseBtn'), 'inactive' );
     setButtonState( $('playBtn'), 'inactive' );
     setButtonState( $('fastFwdBtn'), 'inactive' );
-    setButtonState( $('slowFwdBtn'), 'unavail' );
+    setButtonState( $('slowFwdBtn'), vid1?'inactive':'unavail' );
     setButtonState( $('slowRevBtn'), 'unavail' );
     setButtonState( $('fastRevBtn'), 'inactive' );
-    if ( action )
+    var vid1=$('vid1');
+    if(vid1)
+    {
+        if(vid1.playbackRate<0)
+            vid1.playbackRate=1.0;
+        else
+            vid1.playbackRate=vid1.playbackRate*2.0;
+    }
+    else if ( action )
         streamReq.send( streamParms+"&command="+CMD_FASTFWD );
 }
 
 function streamSlowFwd( action )
 {
+    var vid1=$('vid1');
     setButtonState( $('pauseBtn'), 'inactive' );
     setButtonState( $('playBtn'), 'inactive' );
-    setButtonState( $('fastFwdBtn'), 'unavail' );
+    setButtonState( $('fastFwdBtn'), vid1 && !vid1.paused?'inactive':'unavail' );
     setButtonState( $('slowFwdBtn'), 'active' );
     setButtonState( $('slowRevBtn'), 'inactive' );
     setButtonState( $('fastRevBtn'), 'unavail' );
-    if ( action )
+    if(vid1)
+    {
+        if(vid1.paused)
+            vid1.currentTime=vid1.currentTime+(eventData.Frames/eventData.Length);//1/25;
+        else if(vid1.playbackRate<0)
+            vid1.playbackRate=0.5;
+        else
+            vid1.playbackRate=vid1.playbackRate/2.0;
+    }
+    else if ( action )
         streamReq.send( streamParms+"&command="+CMD_SLOWFWD );
-    setButtonState( $('pauseBtn'), 'active' );
+    setButtonState( $('pauseBtn'), !vid1 || vid1.paused?'active':'inactive' );
     setButtonState( $('slowFwdBtn'), 'inactive' );
 }
 
 function streamSlowRev( action )
 {
+    var vid1=$('vid1');
     setButtonState( $('pauseBtn'), 'inactive' );
     setButtonState( $('playBtn'), 'inactive' );
     setButtonState( $('fastFwdBtn'), 'unavail' );
     setButtonState( $('slowFwdBtn'), 'inactive' );
     setButtonState( $('slowRevBtn'), 'active' );
-    setButtonState( $('fastRevBtn'), 'unavail' );
-    if ( action )
+    setButtonState( $('fastRevBtn'), vid1 && !vid1.paused?'inactive':'unavail' );
+    if(vid1)
+    {
+        if(vid1.paused)
+            vid1.currentTime=vid1.currentTime-(eventData.Frames/eventData.Length);//1/25;
+        else if(vid1.playbackRate>0)
+            vid1.playbackRate=-0.5;//not currently implemented in chrome
+        else
+            vid1.playbackRate=vid1.playbackRate/2.0;
+    }
+    else if ( action )
         streamReq.send( streamParms+"&command="+CMD_SLOWREV );
-    setButtonState( $('pauseBtn'), 'active' );
+    setButtonState( $('pauseBtn'), !vid1 || vid1.paused?'active':'inactive' );
     setButtonState( $('slowRevBtn'), 'inactive' );
 }
 
 function streamFastRev( action )
 {
+    var vid1=$('vid1');
     setButtonState( $('pauseBtn'), 'inactive' );
     setButtonState( $('playBtn'), 'inactive' );
     setButtonState( $('fastFwdBtn'), 'inactive' );
     setButtonState( $('slowFwdBtn'), 'unavail' );
-    setButtonState( $('slowRevBtn'), 'unavail' );
+    setButtonState( $('slowRevBtn'), vid1?'inactive':'unavail' );
     setButtonState( $('fastRevBtn'), 'inactive' );
-    if ( action )
+    if(vid1)
+    {
+        if(vid1.playbackRate>0)
+            vid1.playbackRate=-1.0;//not currently implemented in chrome
+        else
+            vid1.playbackRate=vid1.playbackRate*2.0;
+    }
+    else if ( action )
         streamReq.send( streamParms+"&command="+CMD_FASTREV );
 }
 
 function streamPrev( action )
 {
     streamPlay( false );
-    if ( action )
-        streamReq.send( streamParms+"&command="+CMD_PREV );
+	if(streamMode == 'video') {
+		var videoid = document.getElementById('videoobj');
+		videoobj.src = PrevEventDefVideoPath;
+		videoobj.load();
+		updatedownloadlink();
+	} else {
+		if ( action )
+			streamReq.send( streamParms+"&command="+CMD_PREV );
+	}
 }
 
 function streamNext( action )
 {
     streamPlay( false );
-    if ( action )
-        streamReq.send( streamParms+"&command="+CMD_NEXT );
+	if(streamMode == 'video') {
+		var videoid = document.getElementById('videoobj');
+		videoobj.src = NextEventDefVideoPath;
+		videoobj.load();
+		updatedownloadlink();
+	} else {
+		if ( action )
+			streamReq.send( streamParms+"&command="+CMD_NEXT );
+	}
+}
+
+function updatedownloadlink() {
+	var videoid = document.getElementById('videoobj');
+	var link = document.getElementById('downloadlink');
+	link.href = videoid.currentSrc;
 }
 
 function streamZoomIn( x, y )
@@ -259,6 +342,8 @@ function eventQuery( eventId )
 
 var prevEventId = 0;
 var nextEventId = 0;
+var PrevEventDefVideoPath = "";
+var NextEventDefVideoPath = "";
 
 function getNearEventsResponse( respObj, respText )
 {
@@ -266,6 +351,8 @@ function getNearEventsResponse( respObj, respText )
         return;
     prevEventId = respObj.nearevents.PrevEventId;
     nextEventId = respObj.nearevents.NextEventId;
+    PrevEventDefVideoPath = respObj.nearevents.PrevEventDefVideoPath;
+    NextEventDefVideoPath = respObj.nearevents.NextEventDefVideoPath;
 
     $('prevEventBtn').disabled = !prevEventId;
     $('nextEventBtn').disabled = !nextEventId;
@@ -634,18 +721,42 @@ function showStream()
 {
     $('eventStills').addClass( 'hidden' );
     $('eventStream').removeClass( 'hidden' );
+    $('eventVideo').addClass( 'hidden' );
+    
     $('streamEvent').addClass( 'hidden' );
     $('stillsEvent').removeClass( 'hidden' );
+    $('videoEvent').removeClass( 'hidden' );
+    
+    streamMode = 'stream';
+}
 
-    //$(window).removeEvent( 'resize', updateStillsSizes );
+function showVideo()
+{
+    $('eventStills').addClass( 'hidden' );
+    $('eventStream').addClass( 'hidden' );
+    $('eventVideo').removeClass( 'hidden' );
+    
+    $('streamEvent').removeClass( 'hidden' );
+    $('stillsEvent').removeClass( 'hidden' );
+    $('videoEvent').addClass( 'hidden' );
+    
+    streamMode = 'video';
+    
+    var videoid = document.getElementById('videoobj');
 }
 
 function showStills()
 {
-    $('eventStream').addClass( 'hidden' );
     $('eventStills').removeClass( 'hidden' );
-    $('stillsEvent').addClass( 'hidden' );
+    $('eventStream').addClass( 'hidden' );
+    $('eventVideo').addClass( 'hidden' );		
+	
     $('streamEvent').removeClass( 'hidden' );
+    $('stillsEvent').addClass( 'hidden' );
+    $('videoEvent').removeClass( 'hidden' );
+	
+    streamMode = 'stills';
+	
     streamPause( true );
     if ( !scroll )
     {
@@ -738,8 +849,29 @@ function handleClick( event )
 
 function initPage()
 {
-    streamCmdTimer = streamQuery.delay( 250 );
-    eventQuery.pass( eventData.Id ).delay( 500 );
+    //FIXME prevent blocking...not sure what is happening or best way to unblock
+    if(window.vid)
+    {
+       // var vid1=$('vid1');
+       /* window.vid.oncanplay=null;
+        window.vid.currentTime=window.vid.currentTime-1;
+        window.vid.currentTime=window.vid.currentTime+1;//may not be symetrical of course
+        
+        vid1.onstalled=function(){window.vid.currentTime=window.vid.currentTime-1;window.vid.currentTime=window.vid.currentTime+1;} 
+        vid1.onwaiting=function(){window.vid.currentTime=window.vid.currentTime-1;window.vid.currentTime=window.vid.currentTime+1;}
+        vid1.onloadstart=function(){window.vid.currentTime=window.vid.currentTime-1;window.vid.currentTime=window.vid.currentTime+1;}
+        vid1.onplay=function(){window.vid.currentTime=window.vid.currentTime-1;window.vid.currentTime=window.vid.currentTime+1;}
+        vid1.onplaying=function(){window.vid.currentTime=window.vid.currentTime-1;window.vid.currentTime=window.vid.currentTime+1;}*/
+        //window.vid.hide();//does not help
+        var sources = window.vid.getElementsByTagName('source');
+        sources[0].src=null;
+        window.vid.load();
+        streamPlay();    
+    }
+    else
+    {
+        streamCmdTimer = streamQuery.delay( 250 );
+        eventQuery.pass( eventData.Id ).delay( 500 );
 
     if ( canStreamNative )
     {
