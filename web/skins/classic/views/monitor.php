@@ -27,7 +27,11 @@ if ( !canView( 'Monitors' ) )
 $tabs = array();
 $tabs["general"] = $SLANG['General'];
 $tabs["source"] = $SLANG['Source'];
+<<<<<<< HEAD
 $tabs["storage"] = "Storage";
+=======
+$tabs["storage"] = $SLANG['Storage'];
+>>>>>>> origin/storageareas
 $tabs["timestamp"] = $SLANG['Timestamp'];
 $tabs["buffers"] = $SLANG['Buffers'];
 if ( ZM_OPT_CONTROL && canView( 'Control' ) )
@@ -550,12 +554,18 @@ if ( $tab != 'source' )
     <input type="hidden" name="newMonitor[Deinterlacing]" value="<?= validHtmlStr($newMonitor['Deinterlacing']) ?>"/>
 <?php
 }
+<<<<<<< HEAD
 if ( $tab != 'storage' )
 {
 ?>
     <input type="hidden" name="newMonitor[SaveJPEGs]" value="<?= validHtmlStr($newMonitor['SaveJPEGs']) ?>"/>
     <input type="hidden" name="newMonitor[VideoWriter]" value="<?= validHtmlStr($newMonitor['VideoWriter']) ?>"/>
     <input type="hidden" name="newMonitor[EncoderParameters]" value="<?= validHtmlStr($newMonitor['EncoderParameters']) ?>"/>
+=======
+if ( $tab != 'storage' ) {
+?>
+	<input type="hidden" name="newMonitor[storage_id]" value="<?= validHtmlStr($newMonitor['storage_id']) ?>"/>
+>>>>>>> origin/storageareas
 <?php
 }
 if ( $tab != 'timestamp' )
@@ -809,6 +819,11 @@ switch ( $tab )
 ?>
 <?php
         break;
+    } case 'storage' : {
+		$areas = dbFetchAll( 'SELECT Id, Name FROM Storage ORDER BY Name' );
+?>
+		<tr><td?<?= $SLANG['StorageArea'] ?></td><td><?= buildSelect( "newMonitor[storage_id]", $areas ); ?></td></tr>
+<?php 
     }
     case 'storage'   :
 ?>
