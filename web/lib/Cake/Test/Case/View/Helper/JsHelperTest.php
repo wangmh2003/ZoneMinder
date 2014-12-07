@@ -17,9 +17,8 @@
  * @link          http://book.cakephp.org/2.0/en/development/testing.html CakePHP(tm) Tests
  * @package       Cake.Test.Case.View.Helper
  * @since         CakePHP(tm) v 1.3
- * @license       http://www.opensource.org/licenses/mit-license.php MIT License
+ * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
-
 App::uses('HtmlHelper', 'View/Helper');
 App::uses('JsHelper', 'View/Helper');
 App::uses('JsBaseEngineHelper', 'View/Helper');
@@ -27,11 +26,6 @@ App::uses('FormHelper', 'View/Helper');
 App::uses('View', 'View');
 App::uses('ClassRegistry', 'Utility');
 
-/**
- * Class JsEncodingObject
- *
- * @package       Cake.Test.Case.View.Helper
- */
 class JsEncodingObject {
 
 	protected $_title = 'Old thing';
@@ -42,11 +36,6 @@ class JsEncodingObject {
 
 }
 
-/**
- * Class OptionEngineHelper
- *
- * @package       Cake.Test.Case.View.Helper
- */
 class OptionEngineHelper extends JsBaseEngineHelper {
 
 	protected $_optionMap = array(
@@ -60,7 +49,6 @@ class OptionEngineHelper extends JsBaseEngineHelper {
 /**
  * test method for testing option mapping
  *
- * @param array $options
  * @return array
  */
 	public function testMap($options = array()) {
@@ -70,8 +58,6 @@ class OptionEngineHelper extends JsBaseEngineHelper {
 /**
  * test method for option parsing
  *
- * @param $options
- * @param array $safe
  * @return void
  */
 	public function testParseOptions($options, $safe = array()) {
@@ -699,7 +685,7 @@ class JsHelperTest extends CakeTestCase {
 	}
 
 /**
- * test set()'ing variables to the JavaScript buffer and controlling the output var name.
+ * test set()'ing variables to the Javascript buffer and controlling the output var name.
  *
  * @return void
  */
@@ -873,7 +859,7 @@ class JsBaseEngineTest extends CakeTestCase {
 
 		$object = new JsEncodingObject();
 		$object->title = 'New thing';
-		$object->indexes = array(5, 6, 7, 8);
+		$object->indexes = array(5,6,7,8);
 		$result = $this->JsEngine->object($object);
 		$this->assertEquals($expected, $result);
 

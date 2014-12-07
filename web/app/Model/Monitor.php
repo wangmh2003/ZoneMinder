@@ -2,7 +2,6 @@
   class Monitor extends AppModel {
     public $useTable = 'Monitors';
     public $primaryKey = 'Id';
-    public $displayField = 'Name';
     public $hasMany = array(
 	'Event' => array(
 		'className' => 'Event',
@@ -11,7 +10,8 @@
 	),
 	'Zone' => array(
 		'className' => 'Zone',
-		'foreignKey' => 'MonitorId'
+		'foreignKey' => 'MonitorId',
+		'fields' => 'Zone.Id'
 	)
 );
 

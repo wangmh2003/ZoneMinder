@@ -8,12 +8,11 @@ class Zone extends AppModel {
 			'foreignKey' => 'MonitorId')
 		);
 
-	public function createSnapshot($mid = null) {
-		# chdir(Configure::read('ZM_PATH_WEB') . '/' . Configure::read('ZM_DIR_IMAGES'));
-		chdir(WWW_ROOT . '/img');
+	public function createSnapshot($mid = null, $zid = null) {
+		chdir(Configure::read('ZM_PATH_WEB') . '/' . Configure::read('ZM_DIR_IMAGES'));
 		$command = Configure::read('ZM_PATH_BIN');
-                $command .= "/zmu -m $mid -z";
-		exec( escapeshellcmd( $command ), $output, $status );
+                $command .= "/zmu -m $mid -z$zid";
+		$status = exec( escapeshellcmd( $command ) );
 		return $status;
 	}
 }

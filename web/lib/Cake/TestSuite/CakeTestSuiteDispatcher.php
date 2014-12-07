@@ -15,7 +15,7 @@
  * @link          http://cakephp.org CakePHP(tm) Project
  * @package       Cake.TestSuite
  * @since         CakePHP(tm) v 1.3
- * @license       http://www.opensource.org/licenses/mit-license.php MIT License
+ * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 
 define('CORE_TEST_CASES', CAKE . 'Test' . DS . 'Case');
@@ -79,6 +79,7 @@ class CakeTestSuiteDispatcher {
 /**
  * constructor
  *
+ * @return void
  */
 	public function __construct() {
 		$this->_baseUrl = $_SERVER['PHP_SELF'];
@@ -190,7 +191,7 @@ class CakeTestSuiteDispatcher {
 	}
 
 /**
- * Parse URL params into a 'request'
+ * Parse url params into a 'request'
  *
  * @return void
  */

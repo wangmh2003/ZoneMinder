@@ -17,16 +17,10 @@
  * @link          http://book.cakephp.org/2.0/en/development/testing.html CakePHP(tm) Tests
  * @package       Cake.Test.Case.Model
  * @since         CakePHP(tm) v 2.1
- * @license       http://www.opensource.org/licenses/mit-license.php MIT License
+ * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
-
 require_once dirname(__FILE__) . DS . 'ModelTestBase.php';
 
-/**
- * Class ModelCrossSchemaHabtmTest
- *
- * @package       Cake.Test.Case.Model
- */
 class ModelCrossSchemaHabtmTest extends BaseModelTest {
 
 /**
@@ -147,7 +141,7 @@ class ModelCrossSchemaHabtmTest extends BaseModelTest {
 		));
 
 		$results = $Player->saveAll($player, array('validate' => 'first'));
-		$this->assertNotSame(false, $results);
+		$this->assertNotEqual(false, $results);
 		$count = $Player->find('count');
 		$this->assertEquals(5, $count);
 

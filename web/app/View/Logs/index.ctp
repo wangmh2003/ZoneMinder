@@ -1,5 +1,4 @@
 <?php
-	$this->assign('title', 'Logs');
 	$componentoptions = array();
 	foreach ($components as $component) {
 		$componentoptions[$component['Log']['Component']] = $component['Log']['Component'];

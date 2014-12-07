@@ -15,9 +15,8 @@
  * @link          http://cakephp.org CakePHP(tm) Project
  * @package       Cake.Configure
  * @since         CakePHP(tm) v 2.0
- * @license       http://www.opensource.org/licenses/mit-license.php MIT License
+ * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
-
 App::uses('Hash', 'Utility');
 
 /**
@@ -96,6 +95,7 @@ class IniReader implements ConfigReaderInterface {
  * @return array Parsed configuration values.
  * @throws ConfigureException when files don't exist.
  *  Or when files contain '..' as this could lead to abusive reads.
+ * @throws ConfigureException
  */
 	public function read($key) {
 		if (strpos($key, '..') !== false) {
@@ -154,7 +154,7 @@ class IniReader implements ConfigReaderInterface {
  * @param string $key The identifier to write to. If the key has a . it will be treated
  *  as a plugin prefix.
  * @param array $data The data to convert to ini file.
- * @return integer Bytes saved.
+ * @return int Bytes saved.
  */
 	public function dump($key, $data) {
 		$result = array();
