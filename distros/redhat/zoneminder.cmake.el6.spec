@@ -171,13 +171,11 @@ rm -rf %{_docdir}/%{name}-%{version}
 %dir %attr(755,%{zmuid_final},%{zmgid_final}) %{_localstatedir}/spool/zoneminder-upload
 
 %changelog
-<<<<<<< HEAD
 * Sun Oct 5 2014 Andrew Bauer <knnniggett@users.sourceforge.net> - 1.28.0 
 - Bump version for 1.28.0 release.
-=======
+
 * Sun Aug 03 2014 Andrew Bauer <knnniggett@users.sourceforge.net> - 1.27 
 - Include ONVIF support files
->>>>>>> altaroca/478-onvif-support
 
 * Fri Mar 14 2014 Andrew Bauer <knnniggett@users.sourceforge.net> - 1.27 
 - Tweak build requirements for cmake

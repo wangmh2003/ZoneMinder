@@ -580,15 +580,10 @@ if((ZM_TARGET_DISTRO STREQUAL "f19") OR (ZM_TARGET_DISTRO STREQUAL "f20"))
 	add_subdirectory(distros/fedora)
 elseif(ZM_TARGET_DISTRO STREQUAL "el6")
 	add_subdirectory(distros/redhat)
+	add_subdirectory(misc)
 elseif(ZM_TARGET_DISTRO STREQUAL "OS13")
 	add_subdirectory(distros/opensuse)
-<<<<<<< HEAD
 endif((ZM_TARGET_DISTRO STREQUAL "f19") OR (ZM_TARGET_DISTRO STREQUAL "f20"))
-=======
-else(ZM_TARGET_DISTRO STREQUAL "el6")
-	add_subdirectory(misc)
-endif(ZM_TARGET_DISTRO STREQUAL "f19")
->>>>>>> altaroca/478-onvif-support
 
 # Print optional libraries detection status
 message(STATUS "Optional libraries found:${optlibsfound}")
